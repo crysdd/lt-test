@@ -25,7 +25,7 @@ class ExerciseSeeder extends Seeder
             }
             $category_name = ExerciseService::getExerciseName($category_id);
             Exercise::factory()->create([
-                'category' => $category_id,
+                'category_id' => $category_id,
                 'name' => 'Some exercise about ' . $category_name . ' number ' . $number[$category_id],
                 'text' => 'This is exercise ' . $number[$category_id]. '. bla-bla-bla...',
             ]);
