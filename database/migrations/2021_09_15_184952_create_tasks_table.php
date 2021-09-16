@@ -19,6 +19,7 @@ class CreateTasksTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('RESTRICT');
             $table->unsignedBigInteger('exercise_id');
             $table->foreign('exercise_id')->references('id')->on('exercises')->onUpdate('CASCADE')->onDelete('RESTRICT');
+            $table->date('day');
             $table->boolean('done')->default(false);
             $table->timestamps();
         });
