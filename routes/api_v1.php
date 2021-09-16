@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +21,8 @@ use App\Http\Controllers\Api\V1\UserController;
 //     return $request->user();
 // });
 
-Route::get('/user', [UserController::class, 'index']);
+Route::get('/users', [UserController::class, 'index']);
 
+Route::get('/users/create', [UserController::class, 'create']);
+
+Route::get('/users/get-token', [UserController::class, 'getApiToken']);
