@@ -15,17 +15,12 @@ use App\Http\Controllers\Api\V1\UserController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 Route::get('/users', [UserController::class, 'index'])->name('users_index');
 Route::post('/users/create', [UserController::class, 'create'])->name('create_user');
-Route::get('/login', [UserController::class, 'getApiToken'])->name('login');
+Route::post('/login', [UserController::class, 'getApiToken'])->name('login');
 
 Route::middleware('auth:sanctum')->prefix('tasks')->group(function () {
     Route::get('/', [TaskController::class, 'index'])->name('tasks_index');
-    Route::get('change-task', [TaskController::class, 'reReleaseTask'])->name('change_task');
-    Route::post('done', [TaskController::class, 'done'])->name('done_task');
+    Route::put('change-task', [TaskController::class, 'reReleaseTask'])->name('change_task');
+    Route::put('done', [TaskController::class, 'done'])->name('done_task');
 });
