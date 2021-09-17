@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Exercise;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -13,6 +14,7 @@ use Tests\TestCase;
 
 class TasksTest extends TestCase
 {
+    use DatabaseTransactions;
     /**
      * A basic feature test example.
      *
