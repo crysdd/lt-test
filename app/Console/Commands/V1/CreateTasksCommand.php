@@ -42,9 +42,17 @@ class CreateTasksCommand extends Command
     public function handle()
     {
         $user_ids = User::select('id')->orderBy('id')->get()->pluck('id');
-
+        $all_exercises_ids = $all_exercises_ids_copy = Exercise::inRandomOrder()->get()->pluck('id')->toArray();
+        $limit = 10;
+        $offset = 0;
         foreach ($user_ids as $id) {
-            $exercises = Exercise::inRandomOrder()->select('id')->limit(10)->get()->pluck('id')->toArray();
+            if ( (count($all_exercises_ids) - $offset) < $limit ) {
+                shuffle($all_exercises_ids_copy);
+                $all_exercises_ids = $all_exercises_ids_copy;
+                $offset = 0;
+            }
+            $exercises = array_slice($all_exercises_ids, $offset, $limit, true);
+            $offset += $limit;
             $tasks = [];
             foreach ($exercises as $exercise) {
                 $tasks[] = [
@@ -54,11 +62,10 @@ class CreateTasksCommand extends Command
                 ];
             }
             try {
-                Task::insert($tasks);
+                Task::insert($tasks); // here for prevent crash on big tables
             } catch (\Throwable $th) {
                 Log::debug('v1_tasks:create' . $th->getMessage());
             }
-            echo($id . ' ' . count($exercises) . ' ' . Task::count() . "\n");
         }
 
         return 0;
