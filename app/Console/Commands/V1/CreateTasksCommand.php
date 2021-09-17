@@ -6,6 +6,7 @@ use App\Models\Exercise;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CreateTasksCommand extends Command
 {
@@ -52,7 +53,12 @@ class CreateTasksCommand extends Command
                     'day' => now()->format('Y-m-d'),
                 ];
             }
-            Task::insert($tasks);
+            try {
+                Task::insert($tasks);
+            } catch (\Throwable $th) {
+                Log::debug('v1_tasks:create' . $th->getMessage());
+            }
+            echo($id . ' ' . count($exercises) . ' ' . Task::count() . "\n");
         }
 
         return 0;

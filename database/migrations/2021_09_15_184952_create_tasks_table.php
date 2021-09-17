@@ -22,6 +22,8 @@ class CreateTasksTable extends Migration
             $table->date('day');
             $table->boolean('done')->default(false);
             $table->timestamps();
+
+            $table->unique(['user_id', 'exercise_id', 'day']);
         });
     }
 
