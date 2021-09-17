@@ -26,8 +26,15 @@ class GetApiTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string',
+            'email' => 'required|string|exists:users,email',
             'password' => 'required|string',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'email.exists' => 'User not found',
         ];
     }
 

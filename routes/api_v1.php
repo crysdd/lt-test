@@ -23,6 +23,6 @@ use Illuminate\Support\Facades\Hash;
 
 Route::get('/users', [UserController::class, 'index']);
 
-Route::get('/users/create', [UserController::class, 'create']);
+Route::post('/users/create', [UserController::class, 'create']);
 
 Route::get('/users/get-token', [UserController::class, 'getApiToken']);

@@ -107,11 +107,8 @@ class UserController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if ( ! $user instanceof User ) {
-            return response(['errors' => ['user not found']], 404);
-        }
         if ( ! Hash::check($request->password, $user->password ) ) {
-            return response(['errors' => ['incorrect password']], 503);
+            return response(['errors' => ['incorrect password']], 403);
         }
 
         return response(['token' => $user->id . '|' . $user->api_token ]);
