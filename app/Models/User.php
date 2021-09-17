@@ -21,7 +21,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'api_token',
     ];
 
     /**
@@ -42,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function dayTasks()
+    {
+        return $this->hasMany(Task::class)->where('day', now()->format('Y-m-d'));
+    }
 }

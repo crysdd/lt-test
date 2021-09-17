@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'exercise_id',
+        'day',
+        'done',
+    ];
+
+    public function exercise()
+    {
+        return $this->belongsTo(Exercise::class);
+    }
 }

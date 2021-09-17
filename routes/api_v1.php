@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\TaskController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\UserController;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +19,13 @@ use Illuminate\Support\Facades\Hash;
 //     return $request->user();
 // });
 
-Route::get('/users', [UserController::class, 'index']);
 
-Route::post('/users/create', [UserController::class, 'create']);
+Route::get('/users', [UserController::class, 'index'])->name('users_index');
+Route::post('/users/create', [UserController::class, 'create'])->name('create_user');
+Route::get('/login', [UserController::class, 'getApiToken'])->name('login');
 
-Route::get('/users/get-token', [UserController::class, 'getApiToken']);
+Route::middleware('auth:sanctum')->prefix('tasks')->group(function () {
+    Route::get('/', [TaskController::class, 'index'])->name('tasks_index');
+    Route::get('change-task', [TaskController::class, 'reReleaseTask'])->name('change_task');
+    Route::post('done', [TaskController::class, 'done'])->name('done_task');
+});
