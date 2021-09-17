@@ -14,7 +14,7 @@ class CreateTasksCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'v1_tacks:create';
+    protected $signature = 'v1_tasks:create';
 
     /**
      * The console command description.
