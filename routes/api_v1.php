@@ -24,3 +24,7 @@ Route::middleware('auth:sanctum')->prefix('tasks')->group(function () {
     Route::put('change-task', [TaskController::class, 'reReleaseTask'])->name('change_task');
     Route::put('done', [TaskController::class, 'done'])->name('done_task');
 });
+
+Route::any('{id}', function ($id) {
+    return response(['errors' => ['Resourse not found']], 404);
+});
