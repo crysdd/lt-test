@@ -91,4 +91,85 @@ class UsersTest extends TestCase
             ]
         );
     }
+
+    public function testWrongEmailLogin()
+    {
+        Sanctum::actingAs(
+            $user = User::factory()->create([
+                'name' => 'test',
+                'email' => 'email@example.com',
+                'password' => Hash::make(123),
+            ]),
+        );
+        $payload = [
+            'email' => $user->email . 'foo',
+            'password' => '123',
+        ];
+
+        $this->json('post', 'api/v1/login', $payload)
+        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJson(
+            [
+                'errors' => [
+                    'email' => [
+                        "User not found"
+                    ],
+                ]
+            ]
+        );
+    }
+
+    public function testWrongPasswordLogin()
+    {
+        Sanctum::actingAs(
+            $user = User::factory()->create([
+                'name' => 'test',
+                'email' => 'email@example.com',
+                'password' => Hash::make(123),
+            ]),
+        );
+        $payload = [
+            'email' => $user->email,
+            'password' => '321',
+        ];
+
+        $this->json('post', 'api/v1/login', $payload)
+        ->assertStatus(Response::HTTP_FORBIDDEN)
+        ->assertJson(
+            [
+                'errors' => ["incorrect password"]
+            ]
+        );
+    }
+
+
+    public function testEmptyLogin()
+    {
+        Sanctum::actingAs(
+            $user = User::factory()->create([
+                'name' => 'test',
+                'email' => 'email@example.com',
+                'password' => Hash::make(123),
+            ]),
+        );
+        $payload = [
+            'email' => '',
+            'password' => '',
+        ];
+
+        $this->json('post', 'api/v1/login', $payload)
+        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJson(
+            [
+                'errors' => [
+                    'email' => [
+                        "The email field is required."
+                    ],
+                    'password' => [
+                        "The password field is required."
+                    ]
+                ]
+            ]
+        );
+    }
 }
