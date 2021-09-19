@@ -25,11 +25,23 @@ class ExerciseService
         7 => 'Functions',
     ];
 
+    /**
+     * Get Exercise ID
+     *
+     * @param string $name
+     * @return int|null
+     */
     public static function getExerciseId($name)
     {
         return self::EXERCISE[$name] ?? null;
     }
 
+    /**
+     * Get Exercise Name
+     *
+     * @param int $id
+     * @return string|null
+     */
     public static function getExerciseName($id)
     {
         return self::EXERCISE_NAME[$id] ?? null;
