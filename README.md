@@ -35,15 +35,15 @@ echo "* * * * * www-data /usr/bin/php /app/artisan schedule:run >> /dev/null 2>&
 
 All URI's has prefix `/api/v1`
 
-`/users` - return paginated list of all users.
+`GET /users` - return paginated list of all users.
 
-`/users/create` - make new user and return access api token. Fields: `name, email, password`.
+`POST /users/create` - make new user and return access api token. Fields: `name, email, password`.
 
-`/login` - return token existing user.  Fields: `email, password`.
+`POST /login` - return token existing user.  Fields: `email, password`.
 
-`/tasks` - return tasks of current user for this day.
+`GET /tasks` - return tasks of current user for this day.
 
-`/tasks/change-task` - re-released some task. Fields: `id`.
+`PUT /tasks/change-task` - re-released some task. Fields: `id`.
 
-`/tasks/done` - mark task as done. Fields: `id`.
+`PUT /tasks/done` - mark task as done. Fields: `id`.
 
