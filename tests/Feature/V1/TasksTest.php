@@ -76,7 +76,7 @@ class TasksTest extends TestCase
             'id' => $task->id,
         ];
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
-        if ($this->assertDatabaseCount('tasks', 1)) {
+        if (Exercise::count() === 1) {
             $this->json('put', 'api/v1/tasks/change-task', $payload)
                 ->assertStatus(Response::HTTP_NOT_FOUND)
                 ->assertJson(
