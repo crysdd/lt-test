@@ -27,7 +27,7 @@ class TaskController extends Controller
                 ->where('t.user_id', $user->id)
                 ->where('t.day', now()->format('Y-m-d'))
                 ->paginate();
-        $exercises->getCollection()->transform(function($e) {
+        $exercises->getCollection()->transform(function ($e) {
             $e->category_name = ExerciseService::getExerciseName($e->category_id);
             return $e;
         });
@@ -43,7 +43,7 @@ class TaskController extends Controller
     public function done(TaskRequest $request)
     {
         $task = Task::where('id', $request->id)->where('user_id', $request->user()->id)->first();
-        if ( ! $task instanceof Task ) {
+        if (! $task instanceof Task) {
             return response(['errors' => 'task not found'], 404);
         }
         $task->update(['done' => true]);
@@ -60,12 +60,12 @@ class TaskController extends Controller
     public function reReleaseTask(TaskRequest $request)
     {
         $task = Task::where('id', $request->id)->where('user_id', $request->user()->id)->first();
-        if ( ! $task instanceof Task ) {
+        if (! $task instanceof Task) {
             return response(['errors' => 'task not found'], 404);
         }
         $dayTasks = $request->user()->dayTasks()->get()->pluck('exercise_id')->toArray();
         $exercise = Exercise::whereNotIn('id', $dayTasks)->inRandomOrder()->first();
-        if ( ! $exercise instanceof Exercise ) {
+        if (! $exercise instanceof Exercise) {
             return response(['errors' => ['No one new exercise exists']], 404);
         }
         $task->delete();

@@ -46,7 +46,7 @@ class CreateTasksCommand extends Command
         $limit = 10;
         $offset = 0;
         foreach ($user_ids as $id) {
-            if ( (count($all_exercises_ids) - $offset) < $limit ) {
+            if ((count($all_exercises_ids) - $offset) < $limit) {
                 shuffle($all_exercises_ids_copy);
                 $all_exercises_ids = $all_exercises_ids_copy;
                 $offset = 0;
