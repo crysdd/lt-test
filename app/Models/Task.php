@@ -20,4 +20,9 @@ class Task extends Model
     {
         return $this->belongsTo(Exercise::class);
     }
+
+    public function scopeCurrentTask($query, $request)
+    {
+        return $query->where('id', $request->id)->where('user_id', $request->user()->id)->first();
+    }
 }

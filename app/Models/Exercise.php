@@ -13,4 +13,9 @@ class Exercise extends Model
     {
         return $query->inRandomOrder()->get()->pluck('id')->toArray();
     }
+
+    public function scopeNotCurrentDayExercise($query, array $day_tasks)
+    {
+        return $query->whereNotIn('id', $day_tasks)->inRandomOrder()->first();
+    }
 }
