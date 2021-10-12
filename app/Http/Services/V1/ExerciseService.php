@@ -5,7 +5,7 @@ namespace App\Http\Services\V1;
 class ExerciseService
 {
 
-    const EXERCISE = [
+    public const EXERCISE = [
         'Fundamentals' => 1,
         'String' => 2,
         'Algorithms' => 3,
@@ -15,7 +15,7 @@ class ExerciseService
         'Functions' => 7,
     ];
 
-    const EXERCISE_NAME = [
+    public const EXERCISE_NAME = [
         1 => 'Fundamentals',
         2 => 'String',
         3 => 'Algorithms',

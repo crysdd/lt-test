@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class)->where('day', now()->format('Y-m-d'));
     }
+
+    public function scopeAllIds($query)
+    {
+        return $query->select('id')->orderBy('id')->get()->pluck('id');
+    }
 }

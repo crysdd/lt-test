@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Exercise extends Model
 {
     use HasFactory;
+
+    public function scopeAllIdsInRandomOrder($query)
+    {
+        return $query->inRandomOrder()->get()->pluck('id')->toArray();
+    }
 }

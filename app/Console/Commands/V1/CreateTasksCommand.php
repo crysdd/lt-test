@@ -41,33 +41,45 @@ class CreateTasksCommand extends Command
      */
     public function handle()
     {
-        $user_ids = User::select('id')->orderBy('id')->get()->pluck('id');
-        $all_exercises_ids = $all_exercises_ids_copy = Exercise::inRandomOrder()->get()->pluck('id')->toArray();
+        $user_ids = User::allIds();
+        $all_exercises_ids = $all_exercises_ids_copy = Exercise::allIdsInRandomOrder();
         $limit = 10;
         $offset = 0;
         foreach ($user_ids as $id) {
+            // if we need more exercise than we have, give it from copy
             if ((count($all_exercises_ids) - $offset) < $limit) {
-                shuffle($all_exercises_ids_copy);
-                $all_exercises_ids = $all_exercises_ids_copy;
+                $all_exercises_ids = $this->shuffleExercise($all_exercises_ids_copy);
                 $offset = 0;
             }
-            $exercises = array_slice($all_exercises_ids, $offset, $limit, true);
+            // give only $limit exercises for user
+            $exercise_for_user = array_slice($all_exercises_ids, $offset, $limit, true);
             $offset += $limit;
-            $tasks = [];
-            foreach ($exercises as $exercise) {
-                $tasks[] = [
-                    'user_id' => $id,
-                    'exercise_id' => $exercise,
-                    'day' => now()->format('Y-m-d'),
-                ];
-            }
+            $tasks = $this->makeUserListExercises($id, $exercise_for_user);
             try {
                 Task::insert($tasks); // here for prevent crash on big tables
             } catch (\Throwable $th) {
                 Log::debug('v1_tasks:create' . $th->getMessage());
             }
         }
-
         return 0;
+    }
+
+    private function shuffleExercise(&$all_exercises_ids_copy)
+    {
+        shuffle($all_exercises_ids_copy);
+        return $all_exercises_ids_copy;
+    }
+
+    private function makeUserListExercises($user_id, $exercise_for_user)
+    {
+        $tasks = [];
+        foreach ($exercise_for_user as $exercise) {
+            $tasks[] = [
+                'user_id' => $user_id,
+                'exercise_id' => $exercise,
+                'day' => now()->format('Y-m-d'),
+            ];
+        }
+        return $tasks;
     }
 }
