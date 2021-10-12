@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GetApiTokenRequest;
 use App\Http\Requests\V1\UserCreateRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Http\Services\V1\UserService;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -28,14 +26,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(UserCreateRequest $request)
+    public function create(UserCreateRequest $request, UserService $user_service)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        $token = $user->createToken('api_token')->plainTextToken;
+        $token = $user_service->createUserAndToken($request);
 
         return response(['token' => $token, 'token_type' => 'Bearer'], 201);
     }
@@ -46,11 +39,13 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getApiToken(GetApiTokenRequest $request)
+    public function getApiToken(GetApiTokenRequest $request, UserService $user_service)
     {
-        $user = User::where('email', $request->email)->first();
-
-        if (! Hash::check($request->password, $user->password)) {
+        $user = User::getUserFromEmail($request->email);
+        if (! $user instanceof User) {
+            return response(['errors' => ['user not found']], 404);
+        }
+        if (! $user_service->checkUserPassword($request->password, $user->password)) {
             return response(['errors' => ['incorrect password']], 403);
         }
         $token = $user->createToken('api_token')->plainTextToken;
